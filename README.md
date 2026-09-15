@@ -2,6 +2,8 @@
 
 Cross-platform React Native app that searches public GitHub repositories. TypeScript, strict mode, feature folders.
 
+Android APK: **[latest GitHub Release](https://github.com/Xadinsx/GitHubExplorer/releases/latest)** (`adb install`).
+
 ## Setup
 
 ```bash
@@ -43,9 +45,11 @@ maestro test .maestro/search-detail-theme.yaml
 
 **LegendList v3** (`@legendapp/list/react-native`) with `recycleItems` and a `memo` row. No native list code; less blank space on a fast fling than FlatList. The README-facing alternative would be FlashList — we picked LegendList because rows have dynamic height (description wrapping).
 
-**Unistyles v3** instead of `StyleSheet` tokens. Themes named `light` / `dark`, adaptive (system) by default, in-app System / Light / Dark persisted in MMKV (`setAdaptiveThemes(false)` when pinning). Styles live in a sibling `*.styles.ts` next to the component (same colocation as jawwy-app UI-V2) — no inline `style={{ }}` and no `StyleSheet.create` inside the TSX.
+**Page size 30, not 100.** The sample URL uses `per_page=100`. One hundred variable-height rows in a single response fights recycling and spends the unauthenticated search quota in one shot. `per_page=30` plus `page` (TanStack `useInfiniteQuery`) keeps the first paint small, flings cheap, and still reaches the same result set.
 
-**ESLint + Prettier, jawwy-shaped.** RN community ESLint stays the base (this app is RN 0.87, not jawwy’s ESLint 10 flat config). Prettier matches jawwy (`printWidth` 120, `arrowParens: always`, `trailingComma: es5`). `eslint-plugin-prettier` makes `yarn lint` fail on format drift. Inline styles are an error. Husky + lint-staged run that lint on staged files before each commit (`yarn install` installs the hook). We did not copy sonarjs / `explicit-function-return-type` / husky-runs-coverage.
+**Unistyles v3** instead of `StyleSheet` tokens. Themes named `light` / `dark`, adaptive (system) by default, in-app System / Light / Dark persisted in MMKV (`setAdaptiveThemes(false)` when pinning). Styles live in a sibling `*.styles.ts` next to the component — no inline `style={{ }}` and no `StyleSheet.create` inside the TSX.
+
+**ESLint + Prettier.** RN community ESLint is the base (RN 0.87). Prettier (`printWidth` 120, `arrowParens: always`, `trailingComma: es5`). `eslint-plugin-prettier` makes `yarn lint` fail on format drift. Inline styles are an error. Husky + lint-staged run that lint on staged files before each commit (`yarn install` installs the hook).
 
 **`@d11/react-native-fast-image`.** Disk-cached avatars; the d11 fork is the New Architecture–friendly FastImage.
 
@@ -67,9 +71,11 @@ Capture JS FPS in RN DevTools while flinging a long result list. Target: UI thre
 
 ## APK / Fastlane
 
-Release builds sign with an **upload keystore stored in CI secrets**, not in git.
+Sideload from the **[latest GitHub Release](https://github.com/Xadinsx/GitHubExplorer/releases/latest)**.
 
-Secrets (GitHub Actions / Origin):
+Release APKs are `assembleRelease` builds. With upload-keystore secrets in CI they are Play-upload signed; without those secrets they are **debug-signed** so a reviewer can still install them (`adb install`). They are not Play Store artifacts.
+
+Secrets (GitHub Actions / Origin), used when you want an upload-signed APK:
 
 - `KEYSTORE_BASE64`
 - `STORE_PASSWORD`
@@ -83,7 +89,7 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-CI runs `bundle exec fastlane android github_release` (`assembleRelease` + `set_github_release` + APK upload).
+CI runs `bundle exec fastlane android github_release` (`assembleRelease` + `set_github_release` + APK upload) when the keystore secret is present. If it is missing, the workflow skips Fastlane so the tag stays green — attach a locally built APK with `gh release create` instead.
 
 Locally, after secrets are available as env vars:
 
@@ -92,7 +98,7 @@ bundle install
 bundle exec fastlane android github_release
 ```
 
-Fallback if Fastlane/signing is blocked: `cd android && ./gradlew assembleRelease` (debug-signed if no upload keystore properties are passed).
+Fallback: `cd android && ./gradlew assembleRelease` (debug-signed if no upload keystore properties are passed).
 
 ## Architecture
 
@@ -127,4 +133,4 @@ Screens and UI components keep Unistyles in an adjacent `Component.styles.ts`.
 
 ## License
 
-Private take-home unless you choose otherwise.
+Public take-home. Source lives at [github.com/Xadinsx/GitHubExplorer](https://github.com/Xadinsx/GitHubExplorer).

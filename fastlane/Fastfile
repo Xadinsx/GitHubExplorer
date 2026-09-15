@@ -3,16 +3,22 @@ default_platform(:android)
 platform :android do
   desc "Assemble a release APK and attach it to a GitHub/Origin release for the current tag"
   lane :github_release do
-    gradle(
-      task: "assemble",
-      build_type: "Release",
-      project_dir: "android",
-      properties: {
-        "MYAPP_UPLOAD_STORE_FILE" => ENV["MYAPP_UPLOAD_STORE_FILE"],
+    store_file = ENV["MYAPP_UPLOAD_STORE_FILE"]
+    gradle_properties = {}
+    if store_file && !store_file.empty?
+      gradle_properties = {
+        "MYAPP_UPLOAD_STORE_FILE" => store_file,
         "MYAPP_UPLOAD_STORE_PASSWORD" => ENV["MYAPP_UPLOAD_STORE_PASSWORD"],
         "MYAPP_UPLOAD_KEY_ALIAS" => ENV["MYAPP_UPLOAD_KEY_ALIAS"],
         "MYAPP_UPLOAD_KEY_PASSWORD" => ENV["MYAPP_UPLOAD_KEY_PASSWORD"]
       }
+    end
+
+    gradle(
+      task: "assemble",
+      build_type: "Release",
+      project_dir: "android",
+      properties: gradle_properties
     )
 
     apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]

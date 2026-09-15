@@ -1,5 +1,6 @@
 export const GITHUB_API_BASE = 'https://api.github.com';
 export const GITHUB_API_VERSION = '2022-11-28';
+/** Sample brief uses per_page=100. 30 keeps first paint and flings cheaper; useInfiniteQuery walks the rest. */
 export const SEARCH_PAGE_SIZE = 30;
 export const SEARCH_DEBOUNCE_MS = 400;
 export const SEARCH_MIN_LENGTH = 2;
