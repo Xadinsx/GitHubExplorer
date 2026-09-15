@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/AppIcon-1024.png" alt="GitHub Explorer" width="128" height="128" />
+</p>
+
 # GitHub Explorer
 
 Cross-platform React Native app that searches public GitHub repositories. TypeScript, strict mode, feature folders.
