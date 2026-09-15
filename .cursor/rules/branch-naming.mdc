@@ -1,0 +1,18 @@
+---
+description: Git branch naming prefixes for this repo
+alwaysApply: true
+---
+
+# Branch names
+
+When creating a git branch, use one of these prefixes and kebab-case after the slash. Never `cursor/` and never an unprefixed name.
+
+- `feature/` — new behavior
+- `refactor/` — structure or clarity, no intended behavior change
+- `fix/` — bug that is not an urgent production break
+- `hotfix/` — urgent production fix
+- `chore/` — tooling, deps, CI, formatting
+
+Examples: `feature/search-language-filter`, `refactor/extract-named-config-objects`, `hotfix/rate-limit-crash`.
+
+Full table: `CONTRIBUTING.md`.
