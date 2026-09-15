@@ -9,10 +9,16 @@ import { AppProviders } from './providers';
 import { RootStack } from '@/navigation/RootStack';
 import { styles } from './App.styles';
 
+const networkInspectors = {
+  http: true,
+  websocket: false,
+  sse: false,
+};
+
 export function App() {
   // RN DevTools has no Network tab; this app is fetch-heavy (search, paging, 403 rate limits).
   useNetworkActivityDevTools({
-    inspectors: { http: true, websocket: false, sse: false },
+    inspectors: networkInspectors,
   });
 
   return (

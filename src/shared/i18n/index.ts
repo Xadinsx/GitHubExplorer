@@ -7,17 +7,21 @@ import pt from './pt';
 const deviceLanguage = getLocales()[0]?.languageCode;
 const lng = deviceLanguage === 'pt' ? 'pt' : 'en';
 
+const resources = {
+  en: { translation: en },
+  pt: { translation: pt },
+};
+
+const interpolation = {
+  escapeValue: false,
+};
+
 void i18n.use(initReactI18next).init({
   compatibilityJSON: 'v4',
   lng,
   fallbackLng: 'en',
-  resources: {
-    en: { translation: en },
-    pt: { translation: pt },
-  },
-  interpolation: {
-    escapeValue: false,
-  },
+  resources,
+  interpolation,
 });
 
 export default i18n;
