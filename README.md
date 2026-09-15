@@ -17,7 +17,9 @@ yarn android
 yarn ios
 ```
 
-Metro: `yarn start`
+Metro (Rozenite Network Activity on): `yarn start`
+
+Open **React Native DevTools** → **Network Activity** to inspect GitHub `search/repositories` calls (headers, status, timing, bodies). The plugin is a dev dependency and no-ops in production. `WITH_ROZENITE=false yarn react-native start` runs Metro without it.
 
 Tests: `yarn test`
 
@@ -47,7 +49,7 @@ maestro test .maestro/search-detail-theme.yaml
 
 **Optional `GITHUB_TOKEN`.** 403 + `x-ratelimit-remaining: 0` is a dedicated rate-limit state, not a generic error.
 
-**Flipper.** Deprecated for current React Native. Use **React Native DevTools** (CPU/JS) and the list recycling notes above. Do not install Flipper for this app.
+**Flipper.** Deprecated for current React Native. Use **React Native DevTools** for CPU/JS, plus **Rozenite Network Activity** for HTTP. RN DevTools still has no Chrome-style Network panel; this take-home lives or dies on `fetch` (debounce, infinite pages, `x-ratelimit-remaining`, optional `GITHUB_TOKEN`). Rozenite is the Callstack plugin host that adds that panel without bringing Flipper back. We only load `@rozenite/network-activity-plugin`, enable it behind `WITH_ROZENITE=true` on `yarn start`, and skip websocket/SSE inspectors because this client is HTTP GET only.
 
 ## Performance
 

@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
-    "start": "react-native start",
+    "start": "WITH_ROZENITE=true react-native start",
     "test": "jest --forceExit",
     "tsc": "tsc --noEmit"
   },
@@ -45,6 +45,8 @@
     "@react-native/jest-preset": "0.87.1",
     "@react-native/metro-config": "0.87.1",
     "@react-native/typescript-config": "0.87.1",
+    "@rozenite/metro": "^2.4.0",
+    "@rozenite/network-activity-plugin": "^2.4.0",
     "@testing-library/react-native": "^14.0.1",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.2.0",

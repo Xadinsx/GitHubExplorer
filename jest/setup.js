@@ -87,3 +87,8 @@ jest.mock('@legendapp/list/react-native', () => {
 jest.mock('react-native-nitro-modules', () => ({
   NitroModules: { createHybridObject: jest.fn() },
 }));
+
+jest.mock('@rozenite/network-activity-plugin', () => ({
+  useNetworkActivityDevTools: jest.fn(),
+  withOnBootNetworkActivityRecording: jest.fn(),
+}));
