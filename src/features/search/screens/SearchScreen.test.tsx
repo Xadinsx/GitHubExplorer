@@ -49,7 +49,7 @@ async function renderSearch() {
   return render(
     <AppProviders client={client} persist={false}>
       <SearchScreen />
-    </AppProviders>,
+    </AppProviders>
   );
 }
 
@@ -74,28 +74,20 @@ describe('SearchScreen', () => {
     expect(screen.getByText(i18n.t('search.idleTitle'))).toBeOnTheScreen();
     expect(screen.getByPlaceholderText(i18n.t('search.placeholder'))).toBeOnTheScreen();
 
-    fireEvent.changeText(
-      screen.getByPlaceholderText(i18n.t('search.placeholder')),
-      'react-native',
-    );
+    fireEvent.changeText(screen.getByPlaceholderText(i18n.t('search.placeholder')), 'react-native');
 
     await waitFor(
       () => {
-        expect(searchReposMock).toHaveBeenCalledWith(
-          expect.objectContaining({ query: 'react-native', page: 1 }),
-        );
+        expect(searchReposMock).toHaveBeenCalledWith(expect.objectContaining({ query: 'react-native', page: 1 }));
       },
-      { timeout: 2000 },
+      { timeout: 2000 }
     );
 
     expect(await screen.findByText('facebook/react-native')).toBeOnTheScreen();
     expect(screen.getByText('Build mobile apps')).toBeOnTheScreen();
 
     fireEvent.press(screen.getByText('facebook/react-native'));
-    expect(mockNavigate).toHaveBeenCalledWith(
-      'RepoDetail',
-      expect.objectContaining({ repositoryId: 1, repository }),
-    );
+    expect(mockNavigate).toHaveBeenCalledWith('RepoDetail', expect.objectContaining({ repositoryId: 1, repository }));
     view.unmount();
   });
 });

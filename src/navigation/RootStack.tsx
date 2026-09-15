@@ -9,6 +9,10 @@ import type { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+function HeaderRight() {
+  return <ThemeToggle />;
+}
+
 export function RootStack() {
   const { t } = useTranslation();
   const { theme, rt } = useUnistyles();
@@ -26,22 +30,16 @@ export function RootStack() {
           border: theme.colors.border,
           primary: theme.colors.accent,
         },
-      }}>
+      }}
+    >
       <Stack.Navigator
         screenOptions={{
           headerShadowVisible: false,
-          headerRight: () => <ThemeToggle />,
-        }}>
-        <Stack.Screen
-          name="Search"
-          component={SearchScreen}
-          options={{ title: t('appName') }}
-        />
-        <Stack.Screen
-          name="RepoDetail"
-          component={RepoDetailScreen}
-          options={{ title: t('detail.title') }}
-        />
+          headerRight: HeaderRight,
+        }}
+      >
+        <Stack.Screen name="Search" component={SearchScreen} options={{ title: t('appName') }} />
+        <Stack.Screen name="RepoDetail" component={RepoDetailScreen} options={{ title: t('detail.title') }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

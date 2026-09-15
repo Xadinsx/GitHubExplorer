@@ -10,9 +10,7 @@ export function useRepoSearch(query: string) {
     queryKey: githubQueryKeys.search(query.trim()),
     enabled,
     initialPageParam: 1,
-    queryFn: ({ pageParam, signal }) =>
-      searchRepos({ query: query.trim(), page: pageParam, signal }),
-    getNextPageParam: lastPage =>
-      lastPage.items.length < SEARCH_PAGE_SIZE ? undefined : lastPage.page + 1,
+    queryFn: ({ pageParam, signal }) => searchRepos({ query: query.trim(), page: pageParam, signal }),
+    getNextPageParam: (lastPage) => (lastPage.items.length < SEARCH_PAGE_SIZE ? undefined : lastPage.page + 1),
   });
 }
