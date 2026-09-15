@@ -20,10 +20,7 @@ function buildHeaders(): Headers {
 
 function isRateLimited(response: Response, bodyMessage: string): boolean {
   const remaining = response.headers.get('x-ratelimit-remaining');
-  return (
-    response.status === 403 &&
-    (remaining === '0' || /rate limit/i.test(bodyMessage))
-  );
+  return response.status === 403 && (remaining === '0' || /rate limit/i.test(bodyMessage));
 }
 
 /**
@@ -56,10 +53,7 @@ export async function githubRequest<T>(options: GithubRequestOptions): Promise<T
   }
 
   const message =
-    parsed &&
-    typeof parsed === 'object' &&
-    'message' in parsed &&
-    typeof parsed.message === 'string'
+    parsed && typeof parsed === 'object' && 'message' in parsed && typeof parsed.message === 'string'
       ? parsed.message
       : `GitHub request failed (${response.status})`;
 

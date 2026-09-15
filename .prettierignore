@@ -1,0 +1,8 @@
+android
+ios
+node_modules
+coverage
+.yarn
+vendor
+yarn.lock
+*.cjs

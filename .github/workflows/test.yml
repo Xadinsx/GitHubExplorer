@@ -15,5 +15,7 @@ jobs:
           node-version: '22'
       - run: corepack enable
       - run: yarn install --immutable
+      - run: yarn lint
+      - run: yarn format:check
       - run: yarn test --ci --coverage=false
       - run: yarn tsc --noEmit

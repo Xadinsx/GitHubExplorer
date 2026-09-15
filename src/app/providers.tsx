@@ -11,12 +11,7 @@ export function createQueryClient(): QueryClient {
         staleTime: 60_000,
         gcTime: 1000 * 60 * 60 * 24,
         retry: (failureCount, error) => {
-          if (
-            typeof error === 'object' &&
-            error !== null &&
-            'kind' in error &&
-            error.kind === 'rate_limit'
-          ) {
+          if (typeof error === 'object' && error !== null && 'kind' in error && error.kind === 'rate_limit') {
             return false;
           }
           return failureCount < 2;
@@ -34,11 +29,7 @@ type AppProvidersProps = {
   persist?: boolean;
 };
 
-export function AppProviders({
-  children,
-  client = queryClient,
-  persist = true,
-}: AppProvidersProps) {
+export function AppProviders({ children, client = queryClient, persist = true }: AppProvidersProps) {
   if (!persist) {
     return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
   }
@@ -50,10 +41,11 @@ export function AppProviders({
         persister: queryPersister,
         maxAge: 1000 * 60 * 60 * 24,
         dehydrateOptions: {
-          shouldDehydrateQuery: query =>
+          shouldDehydrateQuery: (query) =>
             query.queryKey[0] === githubQueryKeys.all[0] && query.state.status === 'success',
         },
-      }}>
+      }}
+    >
       {children}
     </PersistQueryClientProvider>
   );

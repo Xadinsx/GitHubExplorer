@@ -45,7 +45,7 @@ describe('RepoDetailScreen', () => {
           name: 'RepoDetail',
           params: { repositoryId: repository.id, repository },
         }}
-      />,
+      />
     );
 
     expect(screen.getByText('facebook/react-native')).toBeOnTheScreen();

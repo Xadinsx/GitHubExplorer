@@ -4,12 +4,12 @@ const mockMemory = new Map();
 
 jest.mock('react-native-mmkv', () => ({
   createMMKV: () => ({
-    getString: key => mockMemory.get(key),
+    getString: (key) => mockMemory.get(key),
     set: (key, value) => {
       mockMemory.set(key, String(value));
     },
-    remove: key => mockMemory.delete(key),
-    contains: key => mockMemory.has(key),
+    remove: (key) => mockMemory.delete(key),
+    contains: (key) => mockMemory.has(key),
     clearAll: () => mockMemory.clear(),
     getAllKeys: () => Array.from(mockMemory.keys()),
   }),
@@ -49,13 +49,19 @@ jest.mock('react-native-unistyles', () => {
     StyleSheet: {
       hairlineWidth: StyleSheet.hairlineWidth,
       configure: jest.fn(),
-      create: styles => {
+      create: (styles) => {
         if (typeof styles === 'function') {
           return StyleSheet.create(styles(mockLightTheme));
         }
         return StyleSheet.create(styles);
       },
-      absoluteFill: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 },
+      absoluteFill: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+      },
       absoluteFillObject: {
         position: 'absolute',
         left: 0,

@@ -3,7 +3,8 @@ const en = {
   search: {
     placeholder: 'Search repositories',
     idleTitle: 'Search GitHub',
-    idleBody: 'Try “react-native”, “unistyles”, or any keyword. Results include name, stars, language, and last update.',
+    idleBody:
+      'Try “react-native”, “unistyles”, or any keyword. Results include name, stars, language, and last update.',
     emptyTitle: 'No repositories found',
     emptyBody: 'Try a different keyword. GitHub search matches names, descriptions, and READMEs.',
     loading: 'Searching GitHub…',

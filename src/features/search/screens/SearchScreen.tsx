@@ -1,16 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  RefreshControl,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { ActivityIndicator, RefreshControl, Text, TextInput, View } from 'react-native';
 import { LegendList } from '@legendapp/list/react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+import { useUnistyles } from 'react-native-unistyles';
 import { useTranslation } from 'react-i18next';
+import { styles } from './SearchScreen.styles';
 import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_LENGTH } from '@/shared/config/env';
 import { isGithubApiError } from '@/shared/api/github/errors';
 import { getLastSearch, setLastSearch } from '@/shared/storage/mmkv';
@@ -35,10 +30,7 @@ export function SearchScreen() {
   const trimmed = debouncedQuery.trim();
   const search = useRepoSearch(trimmed);
 
-  const repositories = useMemo(
-    () => search.data?.pages.flatMap(page => page.items) ?? [],
-    [search.data],
-  );
+  const repositories = useMemo(() => search.data?.pages.flatMap((page) => page.items) ?? [], [search.data]);
 
   const onChangeQuery = (value: string) => {
     setQuery(value);
@@ -52,14 +44,11 @@ export function SearchScreen() {
         repository,
       });
     },
-    [navigation],
+    [navigation]
   );
 
   const showOfflineBanner =
-    search.isError &&
-    isGithubApiError(search.error) &&
-    search.error.kind === 'network' &&
-    repositories.length > 0;
+    search.isError && isGithubApiError(search.error) && search.error.kind === 'network' && repositories.length > 0;
 
   const renderListHeader = () => {
     if (showOfflineBanner) {
@@ -99,7 +88,7 @@ export function SearchScreen() {
       <LegendList
         data={repositories}
         extraData={`${trimmed}-${search.status}-${showOfflineBanner}`}
-        keyExtractor={item => String(item.id)}
+        keyExtractor={(item) => String(item.id)}
         // recycleItems reuses row components on fling so we do not mount 100+ RepoRows.
         recycleItems
         renderItem={({ item }) => <RepoRow repository={item} onPress={onPressRepo} />}
@@ -130,35 +119,3 @@ export function SearchScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create(theme => ({
-  screen: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  searchBar: {
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: theme.colors.border,
-  },
-  input: {
-    backgroundColor: theme.colors.background,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radius.sm,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: 10,
-    color: theme.colors.text,
-    fontSize: 16,
-  },
-  footer: {
-    paddingVertical: theme.spacing.md,
-  },
-  end: {
-    textAlign: 'center',
-    color: theme.colors.textMuted,
-    paddingVertical: theme.spacing.md,
-    fontSize: 13,
-  },
-}));

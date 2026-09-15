@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import i18n from '@/shared/i18n';
+import { styles } from './ErrorBoundary.styles';
 
 type Props = {
   children: ReactNode;
@@ -27,22 +28,10 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 24,
-          gap: 12,
-        }}>
-        <Text style={{ fontSize: 20, fontWeight: '700', textAlign: 'center' }}>
-          {i18n.t('errors.crashTitle')}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => this.setState({ hasError: false })}
-          style={{ backgroundColor: '#0969DA', paddingHorizontal: 16, paddingVertical: 10, borderRadius: 8 }}>
-          <Text style={{ color: '#FFFFFF', fontWeight: '600' }}>{i18n.t('errors.crashRetry')}</Text>
+      <View style={styles.wrap}>
+        <Text style={styles.title}>{i18n.t('errors.crashTitle')}</Text>
+        <Pressable accessibilityRole="button" onPress={() => this.setState({ hasError: false })} style={styles.button}>
+          <Text style={styles.buttonLabel}>{i18n.t('errors.crashRetry')}</Text>
         </Pressable>
       </View>
     );

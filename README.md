@@ -25,6 +25,8 @@ Tests: `yarn test`
 
 Types: `yarn tsc`
 
+Lint: `yarn lint` (ESLint + Prettier via `eslint-plugin-prettier`). Format: `yarn format`.
+
 Maestro (device/emulator running, app installed):
 
 ```bash
@@ -41,7 +43,9 @@ maestro test .maestro/search-detail-theme.yaml
 
 **LegendList v3** (`@legendapp/list/react-native`) with `recycleItems` and a `memo` row. No native list code; less blank space on a fast fling than FlatList. The README-facing alternative would be FlashList — we picked LegendList because rows have dynamic height (description wrapping).
 
-**Unistyles v3** instead of `StyleSheet` tokens. Themes named `light` / `dark`, adaptive (system) by default, in-app System / Light / Dark persisted in MMKV (`setAdaptiveThemes(false)` when pinning).
+**Unistyles v3** instead of `StyleSheet` tokens. Themes named `light` / `dark`, adaptive (system) by default, in-app System / Light / Dark persisted in MMKV (`setAdaptiveThemes(false)` when pinning). Styles live in a sibling `*.styles.ts` next to the component (same colocation as jawwy-app UI-V2) — no inline `style={{ }}` and no `StyleSheet.create` inside the TSX.
+
+**ESLint + Prettier, jawwy-shaped.** RN community ESLint stays the base (this app is RN 0.87, not jawwy’s ESLint 10 flat config). Prettier matches jawwy (`printWidth` 120, `arrowParens: always`, `trailingComma: es5`). `eslint-plugin-prettier` makes `yarn lint` fail on format drift. Inline styles are an error. We did not copy sonarjs / `explicit-function-return-type` / husky-runs-coverage — too heavy for a two-screen take-home.
 
 **`@d11/react-native-fast-image`.** Disk-cached avatars; the d11 fork is the New Architecture–friendly FastImage.
 
@@ -49,7 +53,7 @@ maestro test .maestro/search-detail-theme.yaml
 
 **Optional `GITHUB_TOKEN`.** 403 + `x-ratelimit-remaining: 0` is a dedicated rate-limit state, not a generic error.
 
-**Flipper.** Deprecated for current React Native. Use **React Native DevTools** for CPU/JS, plus **Rozenite Network Activity** for HTTP. RN DevTools still has no Chrome-style Network panel; this take-home lives or dies on `fetch` (debounce, infinite pages, `x-ratelimit-remaining`, optional `GITHUB_TOKEN`). Rozenite is the Callstack plugin host that adds that panel without bringing Flipper back. We only load `@rozenite/network-activity-plugin`, enable it behind `WITH_ROZENITE=true` on `yarn start`, and skip websocket/SSE inspectors because this client is HTTP GET only.
+Use **React Native DevTools** for CPU/JS, plus **Rozenite Network Activity** for HTTP. RN DevTools still has no Chrome-style Network panel; this take-home lives or dies on `fetch` (debounce, infinite pages, `x-ratelimit-remaining`, optional `GITHUB_TOKEN`). Rozenite is the Callstack plugin host that adds that panel. We only load `@rozenite/network-activity-plugin`, enable it behind `WITH_ROZENITE=true` on `yarn start`, and skip websocket/SSE inspectors because this client is HTTP GET only.
 
 ## Performance
 
@@ -109,6 +113,8 @@ src/
     i18n/
     config/
 ```
+
+Screens and UI components keep Unistyles in an adjacent `Component.styles.ts`.
 
 ## What I would do with more time
 

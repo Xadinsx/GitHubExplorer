@@ -22,7 +22,7 @@ describe('githubRequest', () => {
     });
     expect(fetchMock).toHaveBeenCalledWith(
       'https://api.github.com/search/repositories?q=rn',
-      expect.objectContaining({ method: 'GET' }),
+      expect.objectContaining({ method: 'GET' })
     );
   });
 
@@ -39,16 +39,14 @@ describe('githubRequest', () => {
         name: 'GithubApiError',
         kind: 'rate_limit',
         status: 403,
-      }),
+      })
     );
   });
 
   it('throws a network error when fetch fails', async () => {
     fetchMock.mockRejectedValue(new TypeError('Network request failed'));
 
-    await expect(githubRequest({ path: '/search/repositories?q=rn' })).rejects.toBeInstanceOf(
-      GithubApiError,
-    );
+    await expect(githubRequest({ path: '/search/repositories?q=rn' })).rejects.toBeInstanceOf(GithubApiError);
     await expect(githubRequest({ path: '/search/repositories?q=rn' })).rejects.toMatchObject({
       kind: 'network',
     });
