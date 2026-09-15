@@ -18,16 +18,11 @@ const themes = {
   dark: darkTheme,
 };
 
-if (preference === 'system') {
-  StyleSheet.configure({
-    themes,
-    settings: { adaptiveThemes: true },
-  });
-} else {
-  StyleSheet.configure({
-    themes,
-    settings: { initialTheme: preference },
-  });
-}
+const settings = preference === 'system' ? { adaptiveThemes: true as const } : { initialTheme: preference };
+
+StyleSheet.configure({
+  themes,
+  settings,
+});
 
 applyThemePreference(preference);

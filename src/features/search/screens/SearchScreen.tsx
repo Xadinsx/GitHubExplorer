@@ -39,10 +39,11 @@ export function SearchScreen() {
 
   const onPressRepo = useCallback(
     (repository: Repository) => {
-      navigation.navigate('RepoDetail', {
+      const routeParams = {
         repositoryId: repository.id,
         repository,
-      });
+      };
+      navigation.navigate('RepoDetail', routeParams);
     },
     [navigation]
   );

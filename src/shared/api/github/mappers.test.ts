@@ -1,5 +1,12 @@
 import { mapOwner, mapRepository } from './mappers';
-import type { GithubRepositoryDto } from './dto';
+import type { GithubOwnerDto, GithubRepositoryDto } from './dto';
+
+const ownerDto: GithubOwnerDto = {
+  id: 7,
+  login: 'legendapp',
+  avatar_url: 'https://avatars.example/legend.png',
+  html_url: 'https://github.com/legendapp',
+};
 
 const dto: GithubRepositoryDto = {
   id: 42,
@@ -15,22 +22,19 @@ const dto: GithubRepositoryDto = {
   html_url: 'https://github.com/legendapp/list',
   updated_at: '2026-09-01T12:00:00Z',
   created_at: '2024-01-01T12:00:00Z',
-  owner: {
-    id: 7,
-    login: 'legendapp',
-    avatar_url: 'https://avatars.example/legend.png',
-    html_url: 'https://github.com/legendapp',
-  },
+  owner: ownerDto,
 };
 
 describe('GitHub mappers', () => {
   it('maps owner and repository DTOs into domain models', () => {
-    expect(mapOwner(dto.owner)).toEqual({
+    const owner = {
       id: 7,
       login: 'legendapp',
       avatarUrl: 'https://avatars.example/legend.png',
       profileUrl: 'https://github.com/legendapp',
-    });
+    };
+
+    expect(mapOwner(dto.owner)).toEqual(owner);
 
     expect(mapRepository(dto)).toEqual({
       id: 42,
@@ -46,12 +50,7 @@ describe('GitHub mappers', () => {
       htmlUrl: 'https://github.com/legendapp/list',
       updatedAt: '2026-09-01T12:00:00Z',
       createdAt: '2024-01-01T12:00:00Z',
-      owner: {
-        id: 7,
-        login: 'legendapp',
-        avatarUrl: 'https://avatars.example/legend.png',
-        profileUrl: 'https://github.com/legendapp',
-      },
+      owner,
     });
   });
 

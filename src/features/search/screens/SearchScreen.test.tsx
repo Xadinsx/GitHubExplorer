@@ -22,6 +22,13 @@ jest.mock('@react-navigation/native', () => {
 
 const searchReposMock = searchRepos as jest.MockedFunction<typeof searchRepos>;
 
+const owner = {
+  id: 9,
+  login: 'facebook',
+  avatarUrl: 'https://avatars.example/fb.png',
+  profileUrl: 'https://github.com/facebook',
+};
+
 const repository: Repository = {
   id: 1,
   name: 'react-native',
@@ -36,12 +43,7 @@ const repository: Repository = {
   htmlUrl: 'https://github.com/facebook/react-native',
   updatedAt: '2026-09-01T12:00:00Z',
   createdAt: '2015-01-01T12:00:00Z',
-  owner: {
-    id: 9,
-    login: 'facebook',
-    avatarUrl: 'https://avatars.example/fb.png',
-    profileUrl: 'https://github.com/facebook',
-  },
+  owner,
 };
 
 async function renderSearch() {

@@ -18,17 +18,21 @@ export function RootStack() {
   const { theme, rt } = useUnistyles();
   const navTheme = rt.themeName === 'dark' ? DarkTheme : DefaultTheme;
 
+  const navigationThemeColors = {
+    background: theme.colors.background,
+    card: theme.colors.surface,
+    text: theme.colors.text,
+    border: theme.colors.border,
+    primary: theme.colors.accent,
+  };
+
   return (
     <NavigationContainer
       theme={{
         ...navTheme,
         colors: {
           ...navTheme.colors,
-          background: theme.colors.background,
-          card: theme.colors.surface,
-          text: theme.colors.text,
-          border: theme.colors.border,
-          primary: theme.colors.accent,
+          ...navigationThemeColors,
         },
       }}
     >

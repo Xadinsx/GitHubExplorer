@@ -45,7 +45,7 @@ maestro test .maestro/search-detail-theme.yaml
 
 **Unistyles v3** instead of `StyleSheet` tokens. Themes named `light` / `dark`, adaptive (system) by default, in-app System / Light / Dark persisted in MMKV (`setAdaptiveThemes(false)` when pinning). Styles live in a sibling `*.styles.ts` next to the component (same colocation as jawwy-app UI-V2) — no inline `style={{ }}` and no `StyleSheet.create` inside the TSX.
 
-**ESLint + Prettier, jawwy-shaped.** RN community ESLint stays the base (this app is RN 0.87, not jawwy’s ESLint 10 flat config). Prettier matches jawwy (`printWidth` 120, `arrowParens: always`, `trailingComma: es5`). `eslint-plugin-prettier` makes `yarn lint` fail on format drift. Inline styles are an error. We did not copy sonarjs / `explicit-function-return-type` / husky-runs-coverage — too heavy for a two-screen take-home.
+**ESLint + Prettier, jawwy-shaped.** RN community ESLint stays the base (this app is RN 0.87, not jawwy’s ESLint 10 flat config). Prettier matches jawwy (`printWidth` 120, `arrowParens: always`, `trailingComma: es5`). `eslint-plugin-prettier` makes `yarn lint` fail on format drift. Inline styles are an error. Husky + lint-staged run that lint on staged files before each commit (`yarn install` installs the hook). We did not copy sonarjs / `explicit-function-return-type` / husky-runs-coverage.
 
 **`@d11/react-native-fast-image`.** Disk-cached avatars; the d11 fork is the New Architecture–friendly FastImage.
 
