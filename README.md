@@ -25,7 +25,7 @@ Tests: `yarn test`
 
 Types: `yarn tsc`
 
-Lint: `yarn lint` (ESLint + Prettier via `eslint-plugin-prettier`). Format: `yarn format`.
+Lint: `yarn lint` (ESLint + Prettier via `eslint-plugin-prettier`). Format: `yarn format`. Format-on-save is pinned in `.vscode/settings.json` to this repo’s Prettier (`printWidth` 120, 2-space indent) so user-level Prettier settings (e.g. width 70) cannot re-wrap files.
 
 Maestro (device/emulator running, app installed):
 
