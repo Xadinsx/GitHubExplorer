@@ -4,13 +4,13 @@
 
 Prefix, then kebab-case. Never `cursor/` and never an unprefixed name.
 
-| Prefix | Use for |
-| --- | --- |
-| `feature/` | New behavior |
+| Prefix      | Use for                                               |
+| ----------- | ----------------------------------------------------- |
+| `feature/`  | New behavior                                          |
 | `refactor/` | Structure or clarity with no intended behavior change |
-| `fix/` | A bug that is not an urgent production break |
-| `hotfix/` | Urgent production fix |
-| `chore/` | Tooling, deps, CI, formatting |
+| `fix/`      | A bug that is not an urgent production break          |
+| `hotfix/`   | Urgent production fix                                 |
+| `chore/`    | Tooling, deps, CI, formatting                         |
 
 Examples:
 
@@ -21,3 +21,7 @@ Examples:
 - `chore/pin-prettier-print-width`
 
 Commits use conventional commits (`feat`, `fix`, `refactor`, `chore`, `docs`, `test`).
+
+## Pre-commit
+
+`yarn install` enables Husky. Each commit runs lint-staged: ESLint (with Prettier) on staged `ts`/`tsx`, and Prettier on staged `json`/`md`/`mdc`/`yml`.

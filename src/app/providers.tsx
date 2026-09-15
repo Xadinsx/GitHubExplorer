@@ -34,8 +34,7 @@ type AppProvidersProps = {
 };
 
 const persistDehydrateOptions: DehydrateOptions = {
-  shouldDehydrateQuery: (query) =>
-    query.queryKey[0] === githubQueryKeys.all[0] && query.state.status === 'success',
+  shouldDehydrateQuery: (query) => query.queryKey[0] === githubQueryKeys.all[0] && query.state.status === 'success',
 };
 
 const persistOptions = {
