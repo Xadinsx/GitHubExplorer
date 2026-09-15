@@ -1,5 +1,6 @@
 import '@/shared/theme/unistyles';
 import '@/shared/i18n';
+import { useNetworkActivityDevTools } from '@rozenite/network-activity-plugin';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar, StyleSheet } from 'react-native';
@@ -8,6 +9,11 @@ import { AppProviders } from './providers';
 import { RootStack } from '@/navigation/RootStack';
 
 export function App() {
+  // RN DevTools has no Network tab; this app is fetch-heavy (search, paging, 403 rate limits).
+  useNetworkActivityDevTools({
+    inspectors: { http: true, websocket: false, sse: false },
+  });
+
   return (
     <GestureHandlerRootView style={styles.fill}>
       <SafeAreaProvider>
