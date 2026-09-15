@@ -1,0 +1,35 @@
+default_platform(:android)
+
+platform :android do
+  desc "Assemble a release APK and attach it to a GitHub/Origin release for the current tag"
+  lane :github_release do
+    gradle(
+      task: "assemble",
+      build_type: "Release",
+      project_dir: "android",
+      properties: {
+        "MYAPP_UPLOAD_STORE_FILE" => ENV["MYAPP_UPLOAD_STORE_FILE"],
+        "MYAPP_UPLOAD_STORE_PASSWORD" => ENV["MYAPP_UPLOAD_STORE_PASSWORD"],
+        "MYAPP_UPLOAD_KEY_ALIAS" => ENV["MYAPP_UPLOAD_KEY_ALIAS"],
+        "MYAPP_UPLOAD_KEY_PASSWORD" => ENV["MYAPP_UPLOAD_KEY_PASSWORD"]
+      }
+    )
+
+    apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+    tag = ENV["GITHUB_REF_NAME"] || ENV["TAG_NAME"]
+    UI.user_error!("Set GITHUB_REF_NAME or TAG_NAME to the release tag (e.g. v0.1.0)") unless tag
+
+    repo = ENV["GITHUB_REPOSITORY"] || ENV["ORIGIN_REPOSITORY"]
+    UI.user_error!("Set GITHUB_REPOSITORY (owner/name)") unless repo
+
+    set_github_release(
+      repository_name: repo,
+      api_bearer: ENV["GITHUB_TOKEN"] || ENV["ORIGIN_TOKEN"],
+      tag_name: tag,
+      name: tag,
+      description: "GitHub Explorer #{tag}",
+      commitish: ENV["GITHUB_SHA"] || "main",
+      upload_assets: [apk_path].compact
+    )
+  end
+end

@@ -1,0 +1,14 @@
+# Better Maestro flow: search field is a TextInput with placeholder
+appId: com.githubexplorer
+---
+- launchApp
+- assertVisible: "GitHub Explorer"
+- tapOn: "Search repositories"
+- inputText: "react-native"
+- extendedWaitUntil:
+    visible: "facebook/react-native"
+    timeout: 15000
+- tapOn: "facebook/react-native"
+- assertVisible: "Open on GitHub"
+- tapOn: "Dark"
+- assertVisible: "Open on GitHub"
