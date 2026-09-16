@@ -5,6 +5,9 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  list: {
+    flex: 1,
+  },
   searchBar: {
     padding: theme.spacing.md,
     backgroundColor: theme.colors.surface,
