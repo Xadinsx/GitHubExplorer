@@ -22,6 +22,10 @@ Examples:
 
 Commits use conventional commits (`feat`, `fix`, `refactor`, `chore`, `docs`, `test`).
 
+## Layout and naming
+
+New files follow [`docs/architecture.md`](docs/architecture.md): kebab-case folders, PascalCase screens/components, camelCase modules, colocated `*.styles.ts` and `*.test.ts(x)`. Do not add a file until that doc says which folder it belongs in.
+
 ## Pre-commit
 
 `yarn install` enables Husky. Each commit runs lint-staged: ESLint (with Prettier) on staged `ts`/`tsx`, and Prettier on staged `json`/`md`/`mdc`/`yml`.

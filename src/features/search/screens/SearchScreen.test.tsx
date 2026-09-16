@@ -89,7 +89,7 @@ describe('SearchScreen', () => {
     expect(screen.getByText('Build mobile apps')).toBeOnTheScreen();
 
     fireEvent.press(screen.getByText('facebook/react-native'));
-    expect(mockNavigate).toHaveBeenCalledWith('RepoDetail', expect.objectContaining({ repositoryId: 1, repository }));
+    expect(mockNavigate).toHaveBeenCalledWith('RepoDetail', { owner: 'facebook', repo: 'react-native' });
     view.unmount();
   });
 });

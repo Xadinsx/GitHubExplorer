@@ -69,7 +69,7 @@ Use **React Native DevTools** for CPU/JS, plus **Rozenite Network Activity** for
 - `RepoRow` is `React.memo`; `onPress` is a stable `useCallback`.
 - Avatars go through FastImage (HTTP disk cache), not uncached `Image`.
 - Search is debounced 400ms and skipped under 2 characters so we do not burn the GitHub quota on every keystroke.
-- Query `staleTime` 60s + MMKV persist of successful search pages: rotate the app and the last search is instant.
+- Query `staleTime` 60s + MMKV persist of successful search pages: the same query can paint from cache. The search box itself starts empty after a cold start.
 
 Capture JS FPS in RN DevTools while flinging a long result list. Target: UI thread ~60fps on a mid-range Android device; blank-area should be minimal with `recycleItems`.
 
@@ -106,29 +106,12 @@ Fallback: `cd android && ./gradlew assembleRelease` (debug-signed if no upload k
 
 ## Architecture
 
-```
-src/
-  app/                 # providers, error boundary
-  navigation/          # typed native stack
-  features/
-    search/
-    repo-detail/
-    settings/          # theme toggle
-  shared/
-    api/github/
-    types/
-    storage/
-    ui/
-    theme/
-    i18n/
-    config/
-```
+Feature folders (`src/features/*`), typed GitHub boundary (`src/shared/api/github`), TanStack Query as the use-case layer. Screens keep Unistyles in an adjacent `Component.styles.ts`.
 
-Screens and UI components keep Unistyles in an adjacent `Component.styles.ts`.
+Layout, dependency rules, and **strict file/folder naming**: [`docs/architecture.md`](docs/architecture.md).
 
 ## What I would do with more time
 
-- Fetch `GET /repos/{owner}/{repo}` on the detail screen for subscribers/license completeness.
 - Maestro on CI (`workflow_dispatch` Android emulator), not only local.
 - Accessibility pass (Dynamic Type, TalkBack on stats).
 - iOS TestFlight lane.

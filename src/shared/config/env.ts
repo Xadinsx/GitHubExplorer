@@ -5,7 +5,6 @@ export const SEARCH_PAGE_SIZE = 30;
 export const SEARCH_DEBOUNCE_MS = 400;
 export const SEARCH_MIN_LENGTH = 2;
 export const QUERY_CACHE_KEY = 'github-explorer-query-cache';
-export const LAST_SEARCH_KEY = 'github-explorer-last-search';
 export const THEME_PREFERENCE_KEY = 'github-explorer-theme';
 
 /**

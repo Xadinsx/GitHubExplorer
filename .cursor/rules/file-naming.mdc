@@ -1,0 +1,28 @@
+---
+description: Strict src/ file and folder naming; where new files go
+alwaysApply: true
+---
+
+# File and folder naming
+
+Full spec: `docs/architecture.md`. Copy `search` / `repo-detail`; do not invent a new layout.
+
+## Folders
+
+- kebab-case only (`repo-detail`). Never PascalCase, snake_case, `utils/`, `helpers/`, or empty folders.
+- New features: `src/features/<kebab>/{screens,components,hooks}/` — omit a subfolder if unused.
+- Features must not import other features. `shared/` must not import `features/`.
+
+## Files
+
+- Screens: `PascalCase` + `Screen` (`RepoDetailScreen.tsx`).
+- Components: `PascalCase` (`RepoRow.tsx`). Styles: sibling `RepoRow.styles.ts`.
+- Hooks: `useRepoDetail.ts`. Modules: camelCase (`getRepo.ts`, `queryKeys.ts`).
+- Tests: colocated `*.test.ts(x)`. No `__tests__/`, no snapshots, no i18n mocks.
+
+## Placement
+
+- Screen / feature hook / feature-only UI → that feature.
+- GitHub HTTP → `src/shared/api/github/` (one endpoint per file, DTOs in `dto.ts`).
+- Cross-feature widgets → `src/shared/ui/`. Domain types → `src/shared/types/`.
+- Imports: `@/…` across folders; relative only inside the same slice. No new barrel `index.ts`.

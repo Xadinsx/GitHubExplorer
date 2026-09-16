@@ -8,4 +8,5 @@ module.exports = {
   tabWidth: 2,
   printWidth: 120,
   endOfLine: 'auto',
+  overrides: [{ files: '*.mdc', options: { parser: 'markdown' } }],
 };

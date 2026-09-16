@@ -3,14 +3,35 @@ import FastImage from '@d11/react-native-fast-image';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { styles } from './RepoDetailScreen.styles';
+import { useRepoDetail } from '../hooks/useRepoDetail';
 import type { RootStackParamList } from '@/navigation/types';
+import { ErrorView } from '@/shared/ui/ErrorView';
 import { formatCount, formatDate } from '@/shared/ui/format';
+import { SkeletonList } from '@/shared/ui/SkeletonList';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'RepoDetail'>;
 
 export function RepoDetailScreen({ route }: Props) {
   const { t, i18n } = useTranslation();
-  const { repository } = route.params;
+  const { owner, repo } = route.params;
+  const detail = useRepoDetail(owner, repo);
+  const repository = detail.data;
+
+  if (detail.isPending) {
+    return (
+      <View style={styles.screen}>
+        <SkeletonList rows={4} />
+      </View>
+    );
+  }
+
+  if (detail.isError || !repository) {
+    return (
+      <View style={styles.screen}>
+        <ErrorView error={detail.error} onRetry={() => void detail.refetch()} />
+      </View>
+    );
+  }
 
   const stats = [
     { label: t('detail.stars'), value: formatCount(repository.stars) },
