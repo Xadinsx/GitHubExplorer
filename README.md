@@ -71,7 +71,47 @@ Use **React Native DevTools** for CPU/JS, plus **Rozenite Network Activity** for
 - Search is debounced 400ms and skipped under 2 characters so we do not burn the GitHub quota on every keystroke.
 - Query `staleTime` 60s + MMKV persist of successful search pages: the same query can paint from cache. The search box itself starts empty after a cold start.
 
-Capture JS FPS in RN DevTools while flinging a long result list. Target: UI thread ~60fps on a mid-range Android device; blank-area should be minimal with `recycleItems`.
+### Fling / 60 FPS (Flashlight)
+
+Android emulator, **release APK** (`v0.1.0`), search `react-native`, then a 10s fling. [Flashlight](https://docs.flashlight.dev) (Callstack’s recommended metric, not the DevTools Performance tab — that samples JS, not native frames):
+
+<p align="center">
+  <img src="assets/perf-flashlight-fling.png" alt="Flashlight report: score 94, average 53 FPS, peak 60, 199 MB RAM" width="720" />
+</p>
+
+Score **94**. Average **53 FPS** (chart mostly 50–60, peak **60**). Average CPU **16.8%** (no high-CPU flag). Average RAM **199 MB**. Measured with JS Dev Mode off (release). A mid-range physical Android would be the next honesty check.
+
+### Network (Rozenite — Flipper’s Network slot)
+
+RN DevTools has no Chrome-style Network panel. We load `@rozenite/network-activity-plugin` in Metro (`yarn start`) so reviewers can see debounce, `per_page=30`, and paging.
+
+<p align="center">
+  <img src="assets/perf-network-search.png" alt="Rozenite: one search/repositories call, per_page=30, page=1, 200" width="720" />
+</p>
+
+Typing `react-native` produced **one** `GET /search/repositories?q=react-native&per_page=30&page=1` after the 400ms debounce (not one request per letter).
+
+<p align="center">
+  <img src="assets/perf-network-search_2.png" alt="Rozenite: page=2 after scrolling to the end of the list" width="720" />
+</p>
+
+Scrolling to the end of the first page issued `page=2` only — infinite scroll, not a `per_page=100` dump.
+
+### Memory (RN DevTools heap comparison)
+
+Two Hermes heap snapshots after a fling + opening a repo. ~74 MB is mostly **compiled code** (debug + DevTools), not the list.
+
+<p align="center">
+  <img src="assets/perf-memory-repos.png" alt="Heap comparison: Repository objects +3, +240 B, retained by TanStack Query" width="720" />
+</p>
+
+`Repository` objects **+3 / +240 B**, retained by the query cache (expected for extra pages), not unbounded growth.
+
+<p align="center">
+  <img src="assets/perf-memory-fibers.png" alt="Heap comparison: FiberNode +26, +1.9 kB after fling" width="720" />
+</p>
+
+`FiberNode` **+26 / +1.9 kB**. Rows are recycled; the React tree does not grow with scroll position.
 
 ## APK / Fastlane
 
@@ -116,7 +156,7 @@ Layout, dependency rules, and **strict file/folder naming**: [`docs/architecture
 - Accessibility pass (Dynamic Type, TalkBack on stats).
 - iOS TestFlight lane.
 - Query cache eviction UI (“clear offline data”).
-- Screenshot RN DevTools FPS traces into this README once a device is attached.
+- Flashlight on a mid-range physical Android (this capture is an emulator) and in CI.
 
 ## License
 
