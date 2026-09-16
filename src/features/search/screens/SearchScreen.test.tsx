@@ -1,7 +1,8 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { AppProviders, createQueryClient } from '@/app/providers';
 import i18n from '@/shared/i18n';
 import { searchRepos } from '@/shared/api/github/searchRepos';
+import { SEARCH_DEBOUNCE_MS } from '@/shared/config/env';
 import { appStorage } from '@/shared/storage/mmkv';
 import type { Repository } from '@/shared/types/repository';
 import { SearchScreen } from './SearchScreen';
@@ -76,14 +77,16 @@ describe('SearchScreen', () => {
     expect(screen.getByText(i18n.t('search.idleTitle'))).toBeOnTheScreen();
     expect(screen.getByPlaceholderText(i18n.t('search.placeholder'))).toBeOnTheScreen();
 
-    fireEvent.changeText(screen.getByPlaceholderText(i18n.t('search.placeholder')), 'react-native');
+    await act(async () => {
+      fireEvent.changeText(screen.getByPlaceholderText(i18n.t('search.placeholder')), 'react-native');
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), SEARCH_DEBOUNCE_MS);
+      });
+    });
 
-    await waitFor(
-      () => {
-        expect(searchReposMock).toHaveBeenCalledWith(expect.objectContaining({ query: 'react-native', page: 1 }));
-      },
-      { timeout: 2000 }
-    );
+    await waitFor(() => {
+      expect(searchReposMock).toHaveBeenCalledWith(expect.objectContaining({ query: 'react-native', page: 1 }));
+    });
 
     expect(await screen.findByText('facebook/react-native')).toBeOnTheScreen();
     expect(screen.getByText('Build mobile apps')).toBeOnTheScreen();
