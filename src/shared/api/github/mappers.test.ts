@@ -1,5 +1,5 @@
-import { mapOwner, mapRepository } from './mappers';
-import type { GithubOwnerDto, GithubRepositoryDto } from './dto';
+import { mapOwner, mapRepoDetail, mapRepository } from './mappers';
+import type { GithubOwnerDto, GithubRepoDetailDto, GithubRepositoryDto } from './dto';
 
 const ownerDto: GithubOwnerDto = {
   id: 7,
@@ -56,5 +56,34 @@ describe('GitHub mappers', () => {
 
   it('treats a missing license as null', () => {
     expect(mapRepository({ ...dto, license: null }).licenseName).toBeNull();
+  });
+
+  it('maps detail subscribers_count onto watchers', () => {
+    const detailDto: GithubRepoDetailDto = {
+      ...dto,
+      subscribers_count: 80,
+    };
+
+    expect(mapRepoDetail(detailDto)).toEqual({
+      id: 42,
+      name: 'list',
+      fullName: 'legendapp/list',
+      description: 'Fast lists',
+      stars: 1200,
+      forks: 30,
+      watchers: 80,
+      openIssues: 4,
+      language: 'TypeScript',
+      licenseName: 'MIT',
+      htmlUrl: 'https://github.com/legendapp/list',
+      updatedAt: '2026-09-01T12:00:00Z',
+      createdAt: '2024-01-01T12:00:00Z',
+      owner: {
+        id: 7,
+        login: 'legendapp',
+        avatarUrl: 'https://avatars.example/legend.png',
+        profileUrl: 'https://github.com/legendapp',
+      },
+    });
   });
 });

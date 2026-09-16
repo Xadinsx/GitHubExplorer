@@ -1,4 +1,4 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Component, Fragment, type ErrorInfo, type ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import i18n from '@/shared/i18n';
 import { styles } from './ErrorBoundary.styles';
@@ -9,12 +9,13 @@ type Props = {
 
 type State = {
   hasError: boolean;
+  resetKey: number;
 };
 
 export class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false };
+  state: State = { hasError: false, resetKey: 0 };
 
-  static getDerivedStateFromError(): State {
+  static getDerivedStateFromError(): Partial<State> {
     return { hasError: true };
   }
 
@@ -23,17 +24,21 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   render(): ReactNode {
-    if (!this.state.hasError) {
-      return this.props.children;
+    if (this.state.hasError) {
+      return (
+        <View style={styles.wrap}>
+          <Text style={styles.title}>{i18n.t('errors.crashTitle')}</Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => this.setState((state) => ({ hasError: false, resetKey: state.resetKey + 1 }))}
+            style={styles.button}
+          >
+            <Text style={styles.buttonLabel}>{i18n.t('errors.crashRetry')}</Text>
+          </Pressable>
+        </View>
+      );
     }
 
-    return (
-      <View style={styles.wrap}>
-        <Text style={styles.title}>{i18n.t('errors.crashTitle')}</Text>
-        <Pressable accessibilityRole="button" onPress={() => this.setState({ hasError: false })} style={styles.button}>
-          <Text style={styles.buttonLabel}>{i18n.t('errors.crashRetry')}</Text>
-        </Pressable>
-      </View>
-    );
+    return <Fragment key={this.state.resetKey}>{this.props.children}</Fragment>;
   }
 }

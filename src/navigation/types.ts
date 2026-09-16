@@ -1,10 +1,8 @@
-import type { Repository } from '@/shared/types/repository';
-
 export type RootStackParamList = {
   Search: undefined;
   RepoDetail: {
-    repositoryId: number;
-    repository: Repository;
+    owner: string;
+    repo: string;
   };
 };
 

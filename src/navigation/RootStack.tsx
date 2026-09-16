@@ -4,7 +4,7 @@ import { useUnistyles } from 'react-native-unistyles';
 import { useTranslation } from 'react-i18next';
 import { SearchScreen } from '@/features/search/screens/SearchScreen';
 import { RepoDetailScreen } from '@/features/repo-detail/screens/RepoDetailScreen';
-import { ThemeToggle } from '@/features/settings/ThemeToggle';
+import { ThemeToggle } from '@/features/settings/components/ThemeToggle';
 import type { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -43,7 +43,11 @@ export function RootStack() {
         }}
       >
         <Stack.Screen name="Search" component={SearchScreen} options={{ title: t('appName') }} />
-        <Stack.Screen name="RepoDetail" component={RepoDetailScreen} options={{ title: t('detail.title') }} />
+        <Stack.Screen
+          name="RepoDetail"
+          component={RepoDetailScreen}
+          options={({ route }) => ({ title: `${route.params.owner}/${route.params.repo}` })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

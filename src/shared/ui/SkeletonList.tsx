@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { styles } from './Skeleton.styles';
+import { styles } from './SkeletonList.styles';
 
 type SkeletonListProps = {
   rows?: number;

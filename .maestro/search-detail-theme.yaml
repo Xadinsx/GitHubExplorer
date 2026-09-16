@@ -5,10 +5,13 @@ appId: com.githubexplorer
 - assertVisible: 'GitHub Explorer'
 - tapOn: 'Search repositories'
 - inputText: 'react-native'
+- hideKeyboard
 - extendedWaitUntil:
     visible: 'facebook/react-native'
     timeout: 15000
 - tapOn: 'facebook/react-native'
-- assertVisible: 'Open on GitHub'
+- extendedWaitUntil:
+    visible: 'Open on GitHub'
+    timeout: 15000
 - tapOn: 'Dark'
 - assertVisible: 'Open on GitHub'

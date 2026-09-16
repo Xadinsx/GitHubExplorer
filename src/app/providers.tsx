@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider, type DehydrateOptions } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import type { ReactNode } from 'react';
+import { isGithubApiError } from '@/shared/api/github/errors';
 import { githubQueryKeys } from '@/shared/api/github/queryKeys';
 import { queryPersister } from '@/shared/storage/queryPersister';
 
@@ -8,7 +9,7 @@ const defaultQueryOptions = {
   staleTime: 60_000,
   gcTime: 1000 * 60 * 60 * 24,
   retry: (failureCount: number, error: unknown) => {
-    if (typeof error === 'object' && error !== null && 'kind' in error && error.kind === 'rate_limit') {
+    if (isGithubApiError(error) && error.kind === 'rate_limit') {
       return false;
     }
     return failureCount < 2;

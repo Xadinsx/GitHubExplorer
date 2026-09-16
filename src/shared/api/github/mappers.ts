@@ -1,5 +1,5 @@
 import type { Owner, Repository } from '@/shared/types/repository';
-import type { GithubOwnerDto, GithubRepositoryDto } from './dto';
+import type { GithubOwnerDto, GithubRepoDetailDto, GithubRepositoryDto } from './dto';
 
 export function mapOwner(dto: GithubOwnerDto): Owner {
   return {
@@ -26,5 +26,12 @@ export function mapRepository(dto: GithubRepositoryDto): Repository {
     updatedAt: dto.updated_at,
     createdAt: dto.created_at,
     owner: mapOwner(dto.owner),
+  };
+}
+
+export function mapRepoDetail(dto: GithubRepoDetailDto): Repository {
+  return {
+    ...mapRepository(dto),
+    watchers: dto.subscribers_count,
   };
 }

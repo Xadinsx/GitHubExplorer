@@ -26,6 +26,10 @@ export type GithubRepositoryDto = {
   owner: GithubOwnerDto;
 };
 
+export type GithubRepoDetailDto = GithubRepositoryDto & {
+  subscribers_count: number;
+};
+
 export type GithubSearchResponseDto = {
   total_count: number;
   incomplete_results: boolean;

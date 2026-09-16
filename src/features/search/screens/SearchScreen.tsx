@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { ActivityIndicator, RefreshControl, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Keyboard, RefreshControl, Text, TextInput, View } from 'react-native';
 import { LegendList } from '@legendapp/list/react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -8,15 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { styles } from './SearchScreen.styles';
 import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_LENGTH } from '@/shared/config/env';
 import { isGithubApiError } from '@/shared/api/github/errors';
-import { getLastSearch, setLastSearch } from '@/shared/storage/mmkv';
 import type { Repository } from '@/shared/types/repository';
 import { EmptyState } from '@/shared/ui/EmptyState';
 import { ErrorView } from '@/shared/ui/ErrorView';
-import { OfflineBanner } from '@/shared/ui/OfflineBanner';
-import { SkeletonList } from '@/shared/ui/Skeleton';
+import { SkeletonList } from '@/shared/ui/SkeletonList';
 import type { RootStackParamList } from '@/navigation/types';
 import { useDebouncedValue } from '../hooks/useDebouncedValue';
 import { useRepoSearch } from '../hooks/useRepoSearch';
+import { OfflineBanner } from '../components/OfflineBanner';
 import { RepoRow } from '../components/RepoRow';
 
 type SearchNav = NativeStackNavigationProp<RootStackParamList, 'Search'>;
@@ -25,25 +24,19 @@ export function SearchScreen() {
   const { t } = useTranslation();
   const { theme } = useUnistyles();
   const navigation = useNavigation<SearchNav>();
-  const [query, setQuery] = useState(getLastSearch);
+  const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS);
   const trimmed = debouncedQuery.trim();
   const search = useRepoSearch(trimmed);
 
   const repositories = useMemo(() => search.data?.pages.flatMap((page) => page.items) ?? [], [search.data]);
 
-  const onChangeQuery = (value: string) => {
-    setQuery(value);
-    setLastSearch(value);
-  };
-
   const onPressRepo = useCallback(
     (repository: Repository) => {
-      const routeParams = {
-        repositoryId: repository.id,
-        repository,
-      };
-      navigation.navigate('RepoDetail', routeParams);
+      navigation.navigate('RepoDetail', {
+        owner: repository.owner.login,
+        repo: repository.name,
+      });
     },
     [navigation]
   );
@@ -82,14 +75,18 @@ export function SearchScreen() {
           placeholderTextColor={theme.colors.textMuted}
           style={styles.input}
           value={query}
-          onChangeText={onChangeQuery}
+          onChangeText={setQuery}
           returnKeyType="search"
+          blurOnSubmit
+          onSubmitEditing={() => Keyboard.dismiss()}
         />
       </View>
       <LegendList
         data={repositories}
         extraData={`${trimmed}-${search.status}-${showOfflineBanner}`}
         keyExtractor={(item) => String(item.id)}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         // recycleItems reuses row components on fling so we do not mount 100+ RepoRows.
         recycleItems
         renderItem={({ item }) => <RepoRow repository={item} onPress={onPressRepo} />}
