@@ -76,10 +76,10 @@ Use **React Native DevTools** for CPU/JS, plus **Rozenite Network Activity** for
 Android emulator, **release APK** (`v0.1.0`), search `react-native`, then a 10s fling. [Flashlight](https://docs.flashlight.dev) (Callstack’s recommended metric, not the DevTools Performance tab — that samples JS, not native frames):
 
 <p align="center">
-  <img src="assets/perf-flashlight-fling.png" alt="Flashlight report: score 94, average 53 FPS, peak 60, 199 MB RAM" width="720" />
+  <img src="assets/perf-flashlight-fling.png" alt="Flashlight report: score 96, average 54.7 FPS, peak 60, two fling iterations" width="720" />
 </p>
 
-Score **94**. Average **53 FPS** (chart mostly 50–60, peak **60**). Average CPU **16.8%** (no high-CPU flag). Average RAM **199 MB**. Measured with JS Dev Mode off (release). A mid-range physical Android would be the next honesty check.
+Score **96**. Average **54.7 FPS** over two 10s flings (line holds ~53–57, peak **60**, no drop to 0). High CPU **none**. Average RAM **315 MB** (pages accumulate in the query cache on purpose). Release APK, JS Dev Mode off, Android emulator. A mid-range physical Android would be the next honesty check.
 
 ### Network (Rozenite — Flipper’s Network slot)
 
