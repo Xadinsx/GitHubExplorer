@@ -71,7 +71,7 @@ describe('SearchScreen', () => {
       perPage: 30,
     });
 
-    const view = await renderSearch();
+    await renderSearch();
 
     expect(screen.getByText(i18n.t('search.idleTitle'))).toBeOnTheScreen();
     expect(screen.getByPlaceholderText(i18n.t('search.placeholder'))).toBeOnTheScreen();
@@ -90,6 +90,5 @@ describe('SearchScreen', () => {
 
     fireEvent.press(screen.getByText('facebook/react-native'));
     expect(mockNavigate).toHaveBeenCalledWith('RepoDetail', { owner: 'facebook', repo: 'react-native' });
-    view.unmount();
   });
 });
